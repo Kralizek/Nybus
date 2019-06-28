@@ -26,7 +26,7 @@ namespace Tests
                 GenerateDelegates = true
             });
 
-            fixture.Customizations.Add(new TypeRelay(typeof(ISerializer), typeof(JsonSerializer)));
+            fixture.Customizations.Add(new TypeRelay(typeof(ISerializer), typeof(NybusSerializerAdapter)));
 
             fixture.Customizations.Add(new TypeRelay(typeof(IMessageDescriptorStore), typeof(TestMessageDescriptorStore)));
 
@@ -57,7 +57,9 @@ namespace Tests
                 GenerateDelegates = true
             });
 
-            fixture.Customizations.Add(new TypeRelay(typeof(ISerializer), typeof(JsonSerializer)));
+            fixture.Customizations.Add(new TypeRelay(typeof(ISerializer), typeof(NybusSerializerAdapter)));
+
+            fixture.Customizations.Add(new ElementsBuilder<Encoding>(Encoding.GetEncodings().Select(e => e.GetEncoding())));
 
             return fixture;
         }

@@ -1,5 +1,6 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text;
+using INybusSerializer = Nybus.Serialization.ISerializer;
 
 namespace Nybus.Configuration
 {
@@ -10,28 +11,19 @@ namespace Nybus.Configuration
         object DeserializeObject(string item, Type type);
     }
 
-    public class JsonSerializer : ISerializer
+    public class NybusSerializerAdapter : ISerializer
     {
-        private readonly JsonSerializerSettings _settings;
+        private readonly INybusSerializer _serializer;
+        private readonly Encoding _encoding;
 
-        public JsonSerializer() : this(new JsonSerializerSettings())
+        public NybusSerializerAdapter(INybusSerializer serializer, Encoding encoding)
         {
-
+            _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+            _encoding = encoding ?? throw new ArgumentNullException(nameof(encoding));
         }
 
-        public JsonSerializer(JsonSerializerSettings settings)
-        {
-            _settings = settings ?? throw new ArgumentNullException(nameof(settings));
-        }
+        public string SerializeObject(object item) => _encoding.GetString(_serializer.SerializeObject(item, _encoding));
 
-        public string SerializeObject(object item)
-        {
-            return JsonConvert.SerializeObject(item, _settings);
-        }
-
-        public object DeserializeObject(string item, Type type)
-        {
-            return JsonConvert.DeserializeObject(item, type, _settings);
-        }
+        public object DeserializeObject(string item, Type type) => _serializer.DeserializeObject(_encoding.GetBytes(item), type, _encoding);
     }
 }

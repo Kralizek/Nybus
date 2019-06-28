@@ -8,7 +8,7 @@ namespace Nybus
     {
         public static void UseInMemoryBusEngine(this INybusConfigurator configurator)
         {
-            configurator.AddServiceConfiguration(svc => svc.AddSingleton<ISerializer, JsonSerializer>());
+            configurator.AddServiceConfiguration(svc => svc.AddSingleton<ISerializer, NybusSerializerAdapter>());
 
             configurator.AddServiceConfiguration(svc => svc.AddSingleton<IEnvelopeService, EnvelopeService>());
 

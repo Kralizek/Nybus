@@ -34,7 +34,7 @@ namespace Nybus.Configuration
 
         public Encoding OutboundEncoding { get; set; }
 
-        public ISerializer Serializer { get; set; } = new JsonSerializer();
+        public ISerializer Serializer { get; set; }
 
         public IExchangeManager CommandExchangeManager { get; set; }
 
